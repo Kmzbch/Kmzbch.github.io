@@ -47,9 +47,6 @@ var game = (function () {
         Main();
     }
     function Update() {
-        // jackpotLabel.text = padDigits(jackpot, 8);
-        // moneyLabel.text = padDigits(playerMoney, 8);
-        // betLabel.text = padDigits(playerBet, 8);
         stage.update();
     }
     function Main() {
@@ -64,7 +61,13 @@ var game = (function () {
         startGameButton.on('click', function () {
             stage.removeAllChildren();
             playScreen();
+            createjs.Ticker.on('tick', monitorLabels);
         });
+    }
+    function monitorLabels() {
+        jackpotLabel.text = padDigits(jackpot, 8);
+        moneyLabel.text = padDigits(playerMoney, 8);
+        betLabel.text = padDigits(playerBet, 8);
     }
     function playScreen() {
         // create labels
@@ -114,6 +117,7 @@ var game = (function () {
             bet(100);
         });
         spinButton.on('click', pressSpin);
+        spinButton.isDisabled = true;
         // add objects
         stage.addChild(betOneButton);
         stage.addChild(betTenButton);
@@ -133,8 +137,14 @@ var game = (function () {
         else {
             playerBet += amount;
             playerMoney -= amount;
-            betLabel.text = padDigits(playerBet, 8);
-            moneyLabel.text = padDigits(playerMoney, 8);
+            if (playerBet <= 0 || playerMoney <= 0 && playerBet <= 0) {
+                spinButton.isDisabled = true;
+                spinButton.off('click', pressSpin);
+            }
+            else {
+                spinButton.isDisabled = false;
+                spinButton.on('click', pressSpin);
+            }
         }
     }
     // resources
@@ -292,8 +302,6 @@ var game = (function () {
             alert("You Won the $" + jackpot + " Jackpot!!");
             playerMoney += jackpot;
             jackpot = 1000;
-            //
-            jackpotLabel.text = padDigits(jackpot, 8);
         }
     }
     /* Utility function to show a win message and increase player money */
@@ -326,8 +334,6 @@ var game = (function () {
         thirdSymbol.x = 460;
         stage.addChild(thirdSymbol);
         determineWinnings();
-        //
-        moneyLabel.text = padDigits(playerMoney, 8);
     }
     // utilities
     function padDigits(number, digits) {

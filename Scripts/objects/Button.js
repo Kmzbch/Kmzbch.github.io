@@ -18,6 +18,7 @@ var objects;
         __extends(Button, _super);
         function Button(imagePath, x, y, isCentered) {
             var _this = _super.call(this, imagePath) || this;
+            _this._isDisabled = false;
             if (isCentered) {
                 // this.regX = 75;
                 // this.regY = 25;
@@ -31,6 +32,24 @@ var objects;
             _this.on('mouseout', _this.HoverOut);
             return _this;
         }
+        Object.defineProperty(Button.prototype, "isDisabled", {
+            get: function () {
+                return this._isDisabled;
+            },
+            set: function (newState) {
+                this._isDisabled = newState;
+                if (newState) {
+                    this.off('mouseover', this.HoverOver);
+                    this.off('mouseout', this.HoverOut);
+                }
+                else {
+                    this.on('mouseover', this.HoverOver);
+                    this.on('mouseout', this.HoverOut);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
         Button.prototype.HoverOver = function () {
             this.alpha = 0.7;
         };

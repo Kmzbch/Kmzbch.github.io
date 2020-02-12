@@ -58,10 +58,6 @@ let game = (function () {
     }
 
     function Update(): void {
-        // jackpotLabel.text = padDigits(jackpot, 8);
-        // moneyLabel.text = padDigits(playerMoney, 8);
-        // betLabel.text = padDigits(playerBet, 8);
-
         stage.update();
     }
 
@@ -81,8 +77,15 @@ let game = (function () {
         startGameButton.on('click', () => {
             stage.removeAllChildren();
             playScreen();
+            createjs.Ticker.on('tick', monitorLabels);
         });
 
+    }
+
+    function monitorLabels(): void {
+        jackpotLabel.text = padDigits(jackpot, 8);
+        moneyLabel.text = padDigits(playerMoney, 8);
+        betLabel.text = padDigits(playerBet, 8);
     }
 
     function playScreen(): void {
@@ -144,6 +147,7 @@ let game = (function () {
         });
 
         spinButton.on('click', pressSpin)
+        spinButton.isDisabled = true;
 
         // add objects
         stage.addChild(betOneButton);
@@ -163,13 +167,17 @@ let game = (function () {
 
     function bet(amount: number = 1): void {
         if (playerMoney - amount < 0) {
-
         } else {
             playerBet += amount;
             playerMoney -= amount;
-            betLabel.text = padDigits(playerBet, 8);
-            moneyLabel.text = padDigits(playerMoney, 8);
 
+            if (playerBet <= 0 || playerMoney <= 0 && playerBet <= 0) {
+                spinButton.isDisabled = true;
+                spinButton.off('click', pressSpin);
+            } else {
+                spinButton.isDisabled = false;
+                spinButton.on('click', pressSpin);
+            }
         }
     }
 
@@ -317,8 +325,6 @@ let game = (function () {
             alert("You Won the $" + jackpot + " Jackpot!!");
             playerMoney += jackpot;
             jackpot = 1000;
-            //
-            jackpotLabel.text = padDigits(jackpot, 8);
         }
     }
 
@@ -362,8 +368,6 @@ let game = (function () {
         stage.addChild(thirdSymbol);
 
         determineWinnings();
-        //
-        moneyLabel.text = padDigits(playerMoney, 8);
     }
 
     // utilities
@@ -381,5 +385,6 @@ let game = (function () {
         sevens = 0;
         blanks = 0;
     }
+
 
 })();
