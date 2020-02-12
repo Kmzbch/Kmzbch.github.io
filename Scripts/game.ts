@@ -25,9 +25,9 @@ let game = (function () {
     let quitButton: objects.Button;
 
     // symbols?
-    let firstSymbol: objects.Button;
-    let secondSymbol: objects.Button;
-    let thirdSymbol: objects.Button;
+    let firstSymbol: objects.Symbol;
+    let secondSymbol: objects.Symbol;
+    let thirdSymbol: objects.Symbol;
 
     // variables
     let playerMoney: number = 1000;
@@ -113,9 +113,9 @@ let game = (function () {
         stage.addChild(betTextLabel);
 
         // create symbols
-        firstSymbol = new objects.Button('../Assets/images/banana.jpg', 0, 150, true);
-        secondSymbol = new objects.Button('../Assets/images/orange.jpg', 230, 150, true);
-        thirdSymbol = new objects.Button('../Assets/images/cherry.jpg', 460, 150, true);
+        firstSymbol = new objects.Symbol('../Assets/images/banana.jpg', 0, 150, true);
+        secondSymbol = new objects.Symbol('../Assets/images/orange.jpg', 230, 150, true);
+        thirdSymbol = new objects.Symbol('../Assets/images/cherry.jpg', 460, 150, true);
 
         stage.addChild(firstSymbol);
         stage.addChild(secondSymbol);
@@ -126,8 +126,18 @@ let game = (function () {
         betTenButton = new objects.Button('../Assets/images/betTenButton.png', 230, 490, true);
         betHundredButton = new objects.Button('../Assets/images/betHundredButton.png', 360, 490, true);
         spinButton = new objects.Button('../Assets/images/spinButton.png', 630, 490, true);
-        resetButton = new objects.Button('../Assets/images/resetButton.png', 120, 490, false);
-        quitButton = new objects.Button('../Assets/images/quitButton.png', 230, 490, false);
+        resetButton = new objects.Button('../Assets/images/resetButton.png', 850, 0, false);
+        resetButton.scaleX = 0.5;
+        resetButton.scaleY = 0.5;
+        resetButton.on('click', resetAll);
+
+        quitButton = new objects.Button('../Assets/images/quitButton.png', 910, 0, false);
+        quitButton.scaleX = 0.5;
+        quitButton.scaleY = 0.5;
+        quitButton.on('click', () => {
+            stage.removeAllChildren();
+            startScreen();
+        });
 
         betOneButton.scaleX = 0.5;
         betOneButton.scaleY = 0.5;
@@ -150,7 +160,7 @@ let game = (function () {
             bet(100);
         });
 
-        spinButton.on('click', pressSpin)
+        // spinButton.on('click', pressSpin)
         spinButton.isDisabled = true;
 
         // add objects
@@ -158,8 +168,8 @@ let game = (function () {
         stage.addChild(betTenButton);
         stage.addChild(betHundredButton);
         stage.addChild(spinButton);
-        // stage.addChild(resetButton);
-        // stage.addChild(quitButton);
+        stage.addChild(resetButton);
+        stage.addChild(quitButton);
 
         // add events
         // resetButton.on('click', resetAll)
@@ -171,6 +181,7 @@ let game = (function () {
 
     function bet(amount: number = 1): void {
         if (playerMoney - amount < 0) {
+
         } else {
             playerBet += amount;
             playerMoney -= amount;
@@ -184,6 +195,12 @@ let game = (function () {
             }
         }
     }
+
+    // resources
+    // reset button
+    // https://www.searchpng.com/2019/02/12/reload-blue-icon-transparent-png-free-download/
+    // quit button
+    // https://www.searchpng.com/2019/12/15/close-icon-png-image-free-download-2/
 
     // resources
     // banana
@@ -214,6 +231,7 @@ let game = (function () {
         bells = 0;
         sevens = 0;
         winnings = 0;
+        cheatingForJackpot = false;
     }
 
     function quit(): void {
@@ -336,12 +354,15 @@ let game = (function () {
 
         // cheat code for jackpot
         if (cheatingForJackpot) {
-            alert("You Won the $" + jackpot + " Jackpot!!");
+            //            alert("You Won the $" + jackpot + " Jackpot!!");
+            gameTitle.text = "$WON $" + jackpot + "!!!$"
             playerMoney += jackpot;
             jackpot = 1000;
         } else {
             if (jackPotTry == jackPotWin) {
-                alert("You Won the $" + jackpot + " Jackpot!!");
+                //                alert("You Won the $" + jackpot + " Jackpot!!");
+                gameTitle.text = "$JACKPOT! WON $" + jackpot + "!!!"
+
                 playerMoney += jackpot;
                 jackpot = 1000;
             }
@@ -351,7 +372,7 @@ let game = (function () {
     /* Utility function to show a win message and increase player money */
     function showWinMessage(): void {
         playerMoney += winnings;
-        // alert("You Won: $" + winnings);
+        gameTitle.text = "YOU WON $" + winnings + "!!!"
         resetFruitTally();
         checkJackPot();
     }
@@ -364,6 +385,8 @@ let game = (function () {
     }
 
     function pressSpin(): void {
+        gameTitle.text = "$ SUPER SLOT $"
+
         isSpinning = true;
 
         spinResult = spinReels();
@@ -388,6 +411,14 @@ let game = (function () {
         stage.addChild(thirdSymbol);
 
         determineWinnings();
+        if (playerBet <= 0 || playerMoney <= 0 && playerBet <= 0) {
+            spinButton.isDisabled = true;
+            spinButton.off('click', pressSpin);
+        } else {
+            spinButton.isDisabled = false;
+            spinButton.on('click', pressSpin);
+        }
+
     }
 
     // utilities
@@ -405,6 +436,7 @@ let game = (function () {
         sevens = 0;
         blanks = 0;
     }
+
 
     // cheat code
     window.addEventListener('keydown', function switchJackpotFlag(event: KeyboardEvent) {

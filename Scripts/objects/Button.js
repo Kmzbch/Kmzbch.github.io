@@ -38,13 +38,15 @@ var objects;
             },
             set: function (newState) {
                 this._isDisabled = newState;
+                console.log(newState);
                 if (newState) {
-                    this.off('mouseover', this.HoverOver);
-                    this.off('mouseout', this.HoverOut);
+                    this.removeAllEventListeners();
+                    this.alpha = 0.3;
                 }
                 else {
                     this.on('mouseover', this.HoverOver);
                     this.on('mouseout', this.HoverOut);
+                    this.alpha = 1;
                 }
             },
             enumerable: true,

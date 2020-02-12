@@ -19,24 +19,13 @@ var objects;
         function Symbol(imagePath, x, y, isCentered) {
             var _this = _super.call(this, imagePath) || this;
             if (isCentered) {
-                // this.regX = 75;
-                // this.regY = 25;
                 _this.regX = -150;
                 _this.regY = 25;
             }
             _this.x = x;
             _this.y = y;
-            // common events
-            _this.on('mouseover', _this.HoverOver);
-            _this.on('mouseout', _this.HoverOut);
             return _this;
         }
-        Symbol.prototype.HoverOver = function () {
-            this.alpha = 0.7;
-        };
-        Symbol.prototype.HoverOut = function () {
-            this.alpha = 1;
-        };
         return Symbol;
     }(createjs.Bitmap));
     objects.Symbol = Symbol;
