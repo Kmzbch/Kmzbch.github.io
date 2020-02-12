@@ -39,6 +39,8 @@ var game = (function () {
     var sevens = 0;
     var winnings = 0;
     var isSpinning = false;
+    //
+    var cheatingForJackpot = false;
     function Start() {
         stage = new createjs.Stage(canvas);
         createjs.Ticker.framerate = 60;
@@ -195,6 +197,9 @@ var game = (function () {
         var symbol;
         for (var spin = 0; spin < 3; spin++) {
             outcome[spin] = Math.floor((Math.random() * 65) + 1);
+            if (cheatingForJackpot) {
+                outcome[spin] = 65;
+            }
             switch (outcome[spin]) {
                 case checkRange(outcome[spin], 1, 27): // 41.5% probability
                     symbol = new objects.Button('../Assets/images/blank.jpg', 0, 150, true);
@@ -237,59 +242,64 @@ var game = (function () {
     }
     /* This function calculates the player's winnings, if any */
     function determineWinnings() {
-        if (blanks == 0) {
-            if (grapes == 3) {
-                winnings = playerBet * 10;
-            }
-            else if (bananas == 3) {
-                winnings = playerBet * 20;
-            }
-            else if (oranges == 3) {
-                winnings = playerBet * 30;
-            }
-            else if (cherries == 3) {
-                winnings = playerBet * 40;
-            }
-            else if (bars == 3) {
-                winnings = playerBet * 50;
-            }
-            else if (bells == 3) {
-                winnings = playerBet * 75;
-            }
-            else if (sevens == 3) {
-                winnings = playerBet * 100;
-            }
-            else if (grapes == 2) {
-                winnings = playerBet * 2;
-            }
-            else if (bananas == 2) {
-                winnings = playerBet * 2;
-            }
-            else if (oranges == 2) {
-                winnings = playerBet * 3;
-            }
-            else if (cherries == 2) {
-                winnings = playerBet * 4;
-            }
-            else if (bars == 2) {
-                winnings = playerBet * 5;
-            }
-            else if (bells == 2) {
-                winnings = playerBet * 10;
-            }
-            else if (sevens == 2) {
-                winnings = playerBet * 20;
-            }
-            else if (sevens == 1) {
-                winnings = playerBet * 5;
-            }
-            else {
-                winnings = playerBet * 1;
-            }
+        if (cheatingForJackpot) {
             showWinMessage();
         }
         else {
-            showLossMessage();
+            if (blanks == 0) {
+                if (grapes == 3) {
+                    winnings = playerBet * 10;
+                }
+                else if (bananas == 3) {
+                    winnings = playerBet * 20;
+                }
+                else if (oranges == 3) {
+                    winnings = playerBet * 30;
+                }
+                else if (cherries == 3) {
+                    winnings = playerBet * 40;
+                }
+                else if (bars == 3) {
+                    winnings = playerBet * 50;
+                }
+                else if (bells == 3) {
+                    winnings = playerBet * 75;
+                }
+                else if (sevens == 3) {
+                    winnings = playerBet * 100;
+                }
+                else if (grapes == 2) {
+                    winnings = playerBet * 2;
+                }
+                else if (bananas == 2) {
+                    winnings = playerBet * 2;
+                }
+                else if (oranges == 2) {
+                    winnings = playerBet * 3;
+                }
+                else if (cherries == 2) {
+                    winnings = playerBet * 4;
+                }
+                else if (bars == 2) {
+                    winnings = playerBet * 5;
+                }
+                else if (bells == 2) {
+                    winnings = playerBet * 10;
+                }
+                else if (sevens == 2) {
+                    winnings = playerBet * 20;
+                }
+                else if (sevens == 1) {
+                    winnings = playerBet * 5;
+                }
+                else {
+                    winnings = playerBet * 1;
+                }
+                showWinMessage();
+            }
+            else {
+                showLossMessage();
+            }
         }
         playerBet = 0;
     }
@@ -298,10 +308,18 @@ var game = (function () {
         /* compare two random values */
         var jackPotTry = Math.floor(Math.random() * 51 + 1);
         var jackPotWin = Math.floor(Math.random() * 51 + 1);
-        if (jackPotTry == jackPotWin) {
+        // cheat code for jackpot
+        if (cheatingForJackpot) {
             alert("You Won the $" + jackpot + " Jackpot!!");
             playerMoney += jackpot;
             jackpot = 1000;
+        }
+        else {
+            if (jackPotTry == jackPotWin) {
+                alert("You Won the $" + jackpot + " Jackpot!!");
+                playerMoney += jackpot;
+                jackpot = 1000;
+            }
         }
     }
     /* Utility function to show a win message and increase player money */
@@ -349,5 +367,13 @@ var game = (function () {
         sevens = 0;
         blanks = 0;
     }
+    // cheat code
+    window.addEventListener('keydown', function switchJackpotFlag(event) {
+        // switch with J Key
+        if (event.keyCode === 74) {
+            console.log('flag switched!');
+            cheatingForJackpot = !cheatingForJackpot;
+        }
+    });
 })();
 //# sourceMappingURL=game.js.map
