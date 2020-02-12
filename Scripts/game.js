@@ -4,13 +4,18 @@ var game = (function () {
     var canvas = document.getElementsByTagName('canvas')[0];
     var stage;
     // lables
-    var gameTitle;
+    var messageBoard;
     var betTextLabel;
     var jackpotTextLabel;
     var moneyTextLabel;
     var moneyLabel;
     var jackpotLabel;
     var betLabel;
+    // symbols?
+    var firstSymbol;
+    var secondSymbol;
+    var thirdSymbol;
+    var spinResult = [];
     // buttons
     var startGameButton;
     var betOneButton;
@@ -19,16 +24,10 @@ var game = (function () {
     var spinButton;
     var resetButton;
     var quitButton;
-    // symbols?
-    var firstSymbol;
-    var secondSymbol;
-    var thirdSymbol;
     // variables
-    var playerMoney = 1000;
-    var jackpot = 5000;
+    var playerMoney = util.PLAYER_MONEY;
+    var jackpot = util.JACKPOT;
     var playerBet = 0;
-    // let spinResult: String[] = [];
-    var spinResult = [];
     var blanks = 0;
     var grapes = 0;
     var bananas = 0;
@@ -38,8 +37,6 @@ var game = (function () {
     var bells = 0;
     var sevens = 0;
     var winnings = 0;
-    var isSpinning = false;
-    //
     var cheatingForJackpot = false;
     function Start() {
         stage = new createjs.Stage(canvas);
@@ -55,32 +52,36 @@ var game = (function () {
         startScreen();
     }
     function startScreen() {
+        // clear stage objects
+        stage.removeAllChildren();
         // create labels
-        gameTitle = new objects.Label('$ SUPER SLOT $', "50px bold", "Verdana", "yellow", 480, 50, true);
-        startGameButton = new objects.Button('/Assets/images/startButton.png', 480, 450, true);
-        stage.addChild(gameTitle);
+        messageBoard = new objects.Label(util.GAME_TITLE, "50px bold", "Verdana", "yellow", 480, 50, true);
+        startGameButton = new objects.Button(util.START_BUTTON_PATH, 480, 450, true);
+        // add to stage
+        stage.addChild(messageBoard);
         stage.addChild(startGameButton);
+        // atach event
         startGameButton.on('click', function () {
             stage.removeAllChildren();
             playScreen();
-            createjs.Ticker.on('tick', monitorLabels);
+            createjs.Ticker.on('tick', function monitorLabels() {
+                jackpotLabel.text = padDigits(jackpot, 8);
+                moneyLabel.text = padDigits(playerMoney, 8);
+                betLabel.text = padDigits(playerBet, 8);
+            });
         });
-    }
-    function monitorLabels() {
-        jackpotLabel.text = padDigits(jackpot, 8);
-        moneyLabel.text = padDigits(playerMoney, 8);
-        betLabel.text = padDigits(playerBet, 8);
     }
     function playScreen() {
         // create labels
-        gameTitle = new objects.Label('$ SUPER SLOT $', "50px bold", "Verdana", "yellow", 480, 50, true);
+        messageBoard = new objects.Label(util.GAME_TITLE, "50px bold", "Verdana", "yellow", 480, 50, true);
         jackpotTextLabel = new objects.Label('JACKPOT ', "25px", "Verdana", "#FFFFFF", 250, 360, true);
         moneyTextLabel = new objects.Label('MONEY', "25px", "Verdana", "#FFFFFF", 480, 360, true);
         betTextLabel = new objects.Label('YOUR BET', "25px", "Verdana", "#FFFFFF", 710, 360, true);
         jackpotLabel = new objects.Label(padDigits(jackpot, 8), "33px", "Consolas", "orangered", 250, 400, true);
         moneyLabel = new objects.Label(padDigits(playerMoney, 8), "33px", "Consolas", "orangered", 480, 400, true);
         betLabel = new objects.Label(padDigits(playerBet, 8), "33px", "Consolas", "orangered", 710, 400, true);
-        stage.addChild(gameTitle);
+        // add to stage
+        stage.addChild(messageBoard);
         stage.addChild(jackpotTextLabel);
         stage.addChild(moneyLabel);
         stage.addChild(moneyTextLabel);
@@ -88,28 +89,21 @@ var game = (function () {
         stage.addChild(betLabel);
         stage.addChild(betTextLabel);
         // create symbols
-        firstSymbol = new objects.Symbol('../Assets/images/banana.jpg', 0, 150, true);
-        secondSymbol = new objects.Symbol('../Assets/images/orange.jpg', 230, 150, true);
-        thirdSymbol = new objects.Symbol('../Assets/images/cherry.jpg', 460, 150, true);
+        firstSymbol = new objects.Symbol(util.BANANA_PATH, 0, 150, true);
+        secondSymbol = new objects.Symbol(util.ORANGE_PATH, 230, 150, true);
+        thirdSymbol = new objects.Symbol(util.CHERRY_PATH, 460, 150, true);
+        // add to stage
         stage.addChild(firstSymbol);
         stage.addChild(secondSymbol);
         stage.addChild(thirdSymbol);
         // create buttons
-        betOneButton = new objects.Button('../Assets/images/betOneButton.png', 100, 490, true);
-        betTenButton = new objects.Button('../Assets/images/betTenButton.png', 230, 490, true);
-        betHundredButton = new objects.Button('../Assets/images/betHundredButton.png', 360, 490, true);
-        spinButton = new objects.Button('../Assets/images/spinButton.png', 630, 490, true);
-        resetButton = new objects.Button('../Assets/images/resetButton.png', 850, 0, false);
-        resetButton.scaleX = 0.5;
-        resetButton.scaleY = 0.5;
-        resetButton.on('click', resetAll);
-        quitButton = new objects.Button('../Assets/images/quitButton.png', 910, 0, false);
-        quitButton.scaleX = 0.5;
-        quitButton.scaleY = 0.5;
-        quitButton.on('click', function () {
-            stage.removeAllChildren();
-            startScreen();
-        });
+        betOneButton = new objects.Button(util.BETONE_BUTTON_PATH, 100, 490, true);
+        betTenButton = new objects.Button(util.BETTEN_BUTTON_PATH, 230, 490, true);
+        betHundredButton = new objects.Button(util.BETHUNDRED_BUTTON_PATH, 360, 490, true);
+        spinButton = new objects.Button(util.SPIN_BUTTON_PATH, 630, 490, true);
+        resetButton = new objects.Button(util.REST_BUTTON_PATH, 850, 0, false);
+        quitButton = new objects.Button(util.QUIT_BUTTON_PATH, 910, 0, false);
+        // chane scale
         betOneButton.scaleX = 0.5;
         betOneButton.scaleY = 0.5;
         betTenButton.scaleX = 0.5;
@@ -118,6 +112,18 @@ var game = (function () {
         betHundredButton.scaleY = 0.5;
         spinButton.scaleX = 0.5;
         spinButton.scaleY = 0.5;
+        resetButton.scaleX = 0.5;
+        resetButton.scaleY = 0.5;
+        quitButton.scaleX = 0.5;
+        quitButton.scaleY = 0.5;
+        // add objects
+        stage.addChild(betOneButton);
+        stage.addChild(betTenButton);
+        stage.addChild(betHundredButton);
+        stage.addChild(spinButton);
+        stage.addChild(resetButton);
+        stage.addChild(quitButton);
+        //
         betOneButton.on('click', function () {
             bet(1);
         });
@@ -127,27 +133,18 @@ var game = (function () {
         betHundredButton.on('click', function () {
             bet(100);
         });
-        // spinButton.on('click', pressSpin)
+        resetButton.on('click', resetAll);
+        quitButton.on('click', startScreen);
+        //
         spinButton.isDisabled = true;
-        // add objects
-        stage.addChild(betOneButton);
-        stage.addChild(betTenButton);
-        stage.addChild(betHundredButton);
-        stage.addChild(spinButton);
-        stage.addChild(resetButton);
-        stage.addChild(quitButton);
-        // add events
-        // resetButton.on('click', resetAll)
-        // quitButton.on('click', quit)
     }
     window.addEventListener("load", Start);
     function bet(amount) {
         if (amount === void 0) { amount = 1; }
-        if (playerMoney - amount < 0) {
-        }
-        else {
+        if (playerMoney - amount >= 0) {
             playerBet += amount;
             playerMoney -= amount;
+            // enable/disable spin button
             if (playerBet <= 0 || playerMoney <= 0 && playerBet <= 0) {
                 spinButton.isDisabled = true;
                 spinButton.off('click', pressSpin);
@@ -158,29 +155,9 @@ var game = (function () {
             }
         }
     }
-    // resources
-    // reset button
-    // https://www.searchpng.com/2019/02/12/reload-blue-icon-transparent-png-free-download/
-    // quit button
-    // https://www.searchpng.com/2019/12/15/close-icon-png-image-free-download-2/
-    // resources
-    // banana
-    // http://www.freestockphotos.biz/stockphoto/15909
-    // cherry
-    // https://www.pinclipart.com/pindetail/hxhox_cherry-clipart-cartoon-cherries-shower-curtain-png-download/
-    // bell
-    // http://clipart-library.com/clip-art/238-2386036_bell-emoji-icon-emoji-sino.htm
-    // grape
-    // https://webstockreview.net/pict/getfirst
-    // orange
-    // https://webstockreview.net/pict/getfirst
-    // seven
-    // https://www.nicepng.com/ourpic/u2q8u2u2t4w7u2e6_clip-art-lucky-clip-art-slot-machine-7-png/#
-    // bar
-    // https://www.pinclipart.com/pindetail/iJmJTo_slot-machine-games-graphic-design-clipart/
     function resetAll() {
-        playerMoney = 1000;
-        jackpot = 5000;
+        playerMoney = util.PLAYER_MONEY;
+        jackpot = util.JACKPOT;
         playerBet = 0;
         spinResult = [];
         blanks = 0;
@@ -194,19 +171,15 @@ var game = (function () {
         winnings = 0;
         cheatingForJackpot = false;
     }
-    function quit() {
-        alert('quit!');
-    }
     /* Utility function to check if a value falls within a range of bounds */
     function checkRange(value, lowerBounds, upperBounds) {
-        if (value >= lowerBounds && value <= upperBounds) {
-            return value;
-        }
-        else {
-            return -1;
-        }
+        return (value >= lowerBounds && value <= upperBounds) ? value : -1;
     }
     function spinReels() {
+        // reset symbols
+        stage.removeChild(firstSymbol);
+        stage.removeChild(secondSymbol);
+        stage.removeChild(thirdSymbol);
         var betLine = [];
         var outcome = [0, 0, 0];
         var symbol;
@@ -217,39 +190,39 @@ var game = (function () {
             }
             switch (outcome[spin]) {
                 case checkRange(outcome[spin], 1, 27): // 41.5% probability
-                    symbol = new objects.Button('../Assets/images/blank.jpg', 0, 150, true);
+                    symbol = new objects.Symbol(util.BLANK_PATH, 0, 150, true);
                     blanks++;
                     break;
                 case checkRange(outcome[spin], 28, 37): // 15.4% probability
-                    symbol = new objects.Button('../Assets/images/grape.jpg', 0, 150, true);
+                    symbol = new objects.Symbol(util.GRAPE_PATH, 0, 150, true);
                     grapes++;
                     break;
                 case checkRange(outcome[spin], 38, 46): // 13.8% probability
-                    symbol = new objects.Button('../Assets/images/banana.jpg', 0, 150, true);
+                    symbol = new objects.Symbol(util.BANANA_PATH, 0, 150, true);
                     bananas++;
                     break;
                 case checkRange(outcome[spin], 47, 54): // 12.3% probability
-                    symbol = new objects.Button('../Assets/images/orange.jpg', 0, 150, true);
+                    symbol = new objects.Symbol(util.ORANGE_PATH, 0, 150, true);
                     oranges++;
                     break;
                 case checkRange(outcome[spin], 55, 59): //  7.7% probability
-                    symbol = new objects.Button('../Assets/images/cherry.jpg', 0, 150, true);
+                    symbol = new objects.Symbol(util.CHERRY_PATH, 0, 150, true);
                     cherries++;
                     break;
                 case checkRange(outcome[spin], 60, 62): //  4.6% probability
-                    symbol = new objects.Button('../Assets/images/bar.jpg', 0, 150, true);
+                    symbol = new objects.Symbol(util.BAR_PATH, 0, 150, true);
                     bars++;
                     break;
                 case checkRange(outcome[spin], 63, 64): //  3.1% probability
-                    symbol = new objects.Button('../Assets/images/bell.jpg', 0, 150, true);
+                    symbol = new objects.Symbol(util.BELL_PATH, 0, 150, true);
                     bells++;
                     break;
                 case checkRange(outcome[spin], 65, 65): //  1.5% probability
-                    symbol = new objects.Button('../Assets/images/seven.jpg', 0, 150, true);
+                    symbol = new objects.Symbol(util.SEVEN_PATH, 0, 150, true);
                     sevens++;
                     break;
                 default:
-                    symbol = new objects.Button('../Asssets/images/blank.jpg', 0, 150, true);
+                    symbol = new objects.Symbol(util.BLANK_PATH, 0, 150, true);
             }
             betLine.push(symbol);
         }
@@ -310,66 +283,51 @@ var game = (function () {
                 else {
                     winnings = playerBet * 1;
                 }
+                // win
                 showWinMessage();
             }
             else {
-                showLossMessage();
+                // lose
+                resetFruitTally();
             }
         }
+        // reset player bet
         playerBet = 0;
     }
     /* Check to see if the player won the jackpot */
     function checkJackPot() {
-        /* compare two random values */
         var jackPotTry = Math.floor(Math.random() * 51 + 1);
         var jackPotWin = Math.floor(Math.random() * 51 + 1);
         // cheat code for jackpot
         if (cheatingForJackpot) {
-            //            alert("You Won the $" + jackpot + " Jackpot!!");
-            gameTitle.text = "$WON $" + jackpot + "!!!$";
+            messageBoard.text = "$WON $" + jackpot + "!!!$";
             playerMoney += jackpot;
             jackpot = 1000;
         }
         else {
             if (jackPotTry == jackPotWin) {
-                //                alert("You Won the $" + jackpot + " Jackpot!!");
-                gameTitle.text = "$JACKPOT! WON $" + jackpot + "!!!";
+                messageBoard.text = "$JACKPOT! WON $" + jackpot + "!!!";
                 playerMoney += jackpot;
                 jackpot = 1000;
             }
         }
     }
-    /* Utility function to show a win message and increase player money */
-    function showWinMessage() {
-        playerMoney += winnings;
-        gameTitle.text = "YOU WON $" + winnings + "!!!";
-        resetFruitTally();
-        checkJackPot();
-    }
-    /* Utility function to show a loss message and reduce player money */
-    function showLossMessage() {
-        // playerMoney -= playerBet;
-        // alert("You Lost!");
-        resetFruitTally();
-    }
     function pressSpin() {
-        gameTitle.text = "$ SUPER SLOT $";
-        isSpinning = true;
+        // reset message board
+        messageBoard.text = util.GAME_TITLE;
+        //
         spinResult = spinReels();
-        // alert("spinned!: " + spinResult.join(' - '));
-        stage.removeChild(firstSymbol);
         firstSymbol = spinResult[0];
         firstSymbol.x = 0;
-        stage.addChild(firstSymbol);
-        stage.removeChild(secondSymbol);
         secondSymbol = spinResult[1];
         secondSymbol.x = 230;
-        stage.addChild(secondSymbol);
-        stage.removeChild(thirdSymbol);
         thirdSymbol = spinResult[2];
         thirdSymbol.x = 460;
+        stage.addChild(firstSymbol);
+        stage.addChild(secondSymbol);
         stage.addChild(thirdSymbol);
         determineWinnings();
+        //
         if (playerBet <= 0 || playerMoney <= 0 && playerBet <= 0) {
             spinButton.isDisabled = true;
             spinButton.off('click', pressSpin);
@@ -379,7 +337,14 @@ var game = (function () {
             spinButton.on('click', pressSpin);
         }
     }
-    // utilities
+    /* Utilities */
+    /* Utility function to show a win message and increase player money */
+    function showWinMessage() {
+        playerMoney += winnings;
+        messageBoard.text = "YOU WON $" + winnings + "!!!";
+        resetFruitTally();
+        checkJackPot();
+    }
     function padDigits(number, digits) {
         return Array(Math.max(digits - String(number).length + 1, 0)).join('0') + number;
     }
