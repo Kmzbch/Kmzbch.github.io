@@ -16,22 +16,31 @@ var objects;
 (function (objects) {
     var Button = /** @class */ (function (_super) {
         __extends(Button, _super);
-        function Button(imagePath, x, y, isCentered) {
-            var _this = _super.call(this, imagePath) || this;
+        // constructor
+        function Button(imagePath, x, y, width, height, isCentered) {
+            if (x === void 0) { x = 0; }
+            if (y === void 0) { y = 0; }
+            if (width === void 0) { width = 0; }
+            if (height === void 0) { height = 0; }
+            if (isCentered === void 0) { isCentered = false; }
+            var _this = _super.call(this, imagePath, x, y, isCentered) || this;
             _this._isDisabled = false;
-            if (isCentered) {
-                // this.regX = 75;
-                // this.regY = 25;
-                _this.regX = -150;
-                _this.regY = 25;
-            }
-            _this.x = x;
-            _this.y = y;
+            _super.prototype.CustomSize.call(_this, width, height, isCentered);
+            // this.Start();
             // common events
             _this.on('mouseover', _this.HoverOver);
             _this.on('mouseout', _this.HoverOut);
             return _this;
         }
+        Button.prototype.Start = function () {
+            throw new Error("Method not implemented.");
+        };
+        Button.prototype.Update = function () {
+            throw new Error("Method not implemented.");
+        };
+        Button.prototype.Reset = function () {
+            throw new Error("Method not implemented.");
+        };
         Object.defineProperty(Button.prototype, "isDisabled", {
             get: function () {
                 return this._isDisabled;
@@ -59,7 +68,7 @@ var objects;
             this.alpha = 1;
         };
         return Button;
-    }(createjs.Bitmap));
+    }(objects.GameObject));
     objects.Button = Button;
 })(objects || (objects = {}));
 //# sourceMappingURL=Button.js.map

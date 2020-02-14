@@ -1,5 +1,17 @@
 module objects {
-    export class Button extends createjs.Bitmap {
+    export class Button extends GameObject {
+
+        public Start(): void {
+            throw new Error("Method not implemented.");
+        }
+        public Update(): void {
+            throw new Error("Method not implemented.");
+        }
+        public Reset(): void {
+            throw new Error("Method not implemented.");
+        }
+
+
         private _isDisabled: boolean = false;
 
         get isDisabled() {
@@ -21,24 +33,17 @@ module objects {
             }
         }
 
-        constructor(imagePath: string, x: number, y: number, isCentered: boolean) {
-            super(imagePath);
-
-            if (isCentered) {
-                // this.regX = 75;
-                // this.regY = 25;
-                this.regX = -150;
-                this.regY = 25;
-            }
-
-            this.x = x;
-            this.y = y;
+        // constructor
+        constructor(imagePath: string, x: number = 0, y: number = 0, width: number = 0, height: number = 0, isCentered: boolean = false) {
+            super(imagePath, x, y, isCentered);
+            super.CustomSize(width, height, isCentered);
+            // this.Start();
 
             // common events
             this.on('mouseover', this.HoverOver);
             this.on('mouseout', this.HoverOut);
-        }
 
+        }
 
         HoverOver(): void {
             this.alpha = 0.7;

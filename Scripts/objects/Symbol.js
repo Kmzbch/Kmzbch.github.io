@@ -1,4 +1,17 @@
 "use strict";
+// module objects {
+//     export class Symbol extends createjs.Bitmap {
+//         constructor(imagePath: string, x: number, y: number, isCentered: boolean) {
+//             super(imagePath);
+//             if (isCentered) {
+//                 this.regX = -150;
+//                 this.regY = 25;
+//             }
+//             this.x = x;
+//             this.y = y;
+//         }
+//     }
+// }
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -16,18 +29,29 @@ var objects;
 (function (objects) {
     var Symbol = /** @class */ (function (_super) {
         __extends(Symbol, _super);
-        function Symbol(imagePath, x, y, isCentered) {
-            var _this = _super.call(this, imagePath) || this;
-            if (isCentered) {
-                _this.regX = -150;
-                _this.regY = 25;
-            }
-            _this.x = x;
-            _this.y = y;
+        // constructor
+        function Symbol(imagePath, x, y, width, height, isCentered) {
+            if (x === void 0) { x = 0; }
+            if (y === void 0) { y = 0; }
+            if (width === void 0) { width = 0; }
+            if (height === void 0) { height = 0; }
+            if (isCentered === void 0) { isCentered = false; }
+            var _this = _super.call(this, imagePath, x, y, isCentered) || this;
+            _super.prototype.CustomSize.call(_this, width, height, isCentered);
             return _this;
+            // this.Start();
         }
+        Symbol.prototype.Start = function () {
+            throw new Error("Method not implemented.");
+        };
+        Symbol.prototype.Update = function () {
+            throw new Error("Method not implemented.");
+        };
+        Symbol.prototype.Reset = function () {
+            throw new Error("Method not implemented.");
+        };
         return Symbol;
-    }(createjs.Bitmap));
+    }(objects.GameObject));
     objects.Symbol = Symbol;
 })(objects || (objects = {}));
 //# sourceMappingURL=Symbol.js.map

@@ -3,7 +3,7 @@ var game = (function () {
     // canvas
     var canvas = document.getElementsByTagName('canvas')[0];
     var stage;
-    // lables
+    // labels
     var messageBoard;
     var betTextLabel;
     var jackpotTextLabel;
@@ -56,7 +56,7 @@ var game = (function () {
         stage.removeAllChildren();
         // create labels
         messageBoard = new objects.Label(util.GAME_TITLE, "50px bold", "Verdana", "yellow", 480, 50, true);
-        startGameButton = new objects.Button(util.START_BUTTON_PATH, 480, 450, true);
+        startGameButton = new objects.Button(util.START_BUTTON_PATH, 500, 500, 100, 100, true);
         // add to stage
         stage.addChild(messageBoard);
         stage.addChild(startGameButton);
@@ -89,33 +89,20 @@ var game = (function () {
         stage.addChild(betLabel);
         stage.addChild(betTextLabel);
         // create symbols
-        firstSymbol = new objects.Symbol(util.BANANA_PATH, 0, 150, true);
-        secondSymbol = new objects.Symbol(util.ORANGE_PATH, 230, 150, true);
-        thirdSymbol = new objects.Symbol(util.CHERRY_PATH, 460, 150, true);
+        firstSymbol = new objects.Symbol(util.BANANA_PATH, 260, 230, 200, 200, true);
+        secondSymbol = new objects.Symbol(util.ORANGE_PATH, 480, 230, 200, 200, true);
+        thirdSymbol = new objects.Symbol(util.CHERRY_PATH, 700, 230, 200, 200, true);
         // add to stage
         stage.addChild(firstSymbol);
         stage.addChild(secondSymbol);
         stage.addChild(thirdSymbol);
         // create buttons
-        betOneButton = new objects.Button(util.BETONE_BUTTON_PATH, 100, 490, true);
-        betTenButton = new objects.Button(util.BETTEN_BUTTON_PATH, 230, 490, true);
-        betHundredButton = new objects.Button(util.BETHUNDRED_BUTTON_PATH, 360, 490, true);
-        spinButton = new objects.Button(util.SPIN_BUTTON_PATH, 630, 490, true);
-        resetButton = new objects.Button(util.REST_BUTTON_PATH, 850, 0, false);
-        quitButton = new objects.Button(util.QUIT_BUTTON_PATH, 910, 0, false);
-        // chane scale
-        betOneButton.scaleX = 0.5;
-        betOneButton.scaleY = 0.5;
-        betTenButton.scaleX = 0.5;
-        betTenButton.scaleY = 0.5;
-        betHundredButton.scaleX = 0.5;
-        betHundredButton.scaleY = 0.5;
-        spinButton.scaleX = 0.5;
-        spinButton.scaleY = 0.5;
-        resetButton.scaleX = 0.5;
-        resetButton.scaleY = 0.5;
-        quitButton.scaleX = 0.5;
-        quitButton.scaleY = 0.5;
+        betOneButton = new objects.Button(util.BETONE_BUTTON_PATH, 200, 490, 100, 100, true);
+        betTenButton = new objects.Button(util.BETTEN_BUTTON_PATH, 330, 490, 100, 100, true);
+        betHundredButton = new objects.Button(util.BETHUNDRED_BUTTON_PATH, 460, 490, 100, 100, true);
+        spinButton = new objects.Button(util.SPIN_BUTTON_PATH, 760, 490, 100, 100, true);
+        resetButton = new objects.Button(util.REST_BUTTON_PATH, 840, 10, 50, 50, false);
+        quitButton = new objects.Button(util.QUIT_BUTTON_PATH, 900, 10, 50, 50, false);
         // add objects
         stage.addChild(betOneButton);
         stage.addChild(betTenButton);
@@ -123,7 +110,7 @@ var game = (function () {
         stage.addChild(spinButton);
         stage.addChild(resetButton);
         stage.addChild(quitButton);
-        //
+        // attach events
         betOneButton.on('click', function () {
             bet(1);
         });
@@ -190,39 +177,39 @@ var game = (function () {
             }
             switch (outcome[spin]) {
                 case checkRange(outcome[spin], 1, 27): // 41.5% probability
-                    symbol = new objects.Symbol(util.BLANK_PATH, 0, 150, true);
+                    symbol = new objects.Symbol(util.BLANK_PATH, 0, 230, 200, 200, true);
                     blanks++;
                     break;
                 case checkRange(outcome[spin], 28, 37): // 15.4% probability
-                    symbol = new objects.Symbol(util.GRAPE_PATH, 0, 150, true);
+                    symbol = new objects.Symbol(util.GRAPE_PATH, 0, 230, 200, 200, true);
                     grapes++;
                     break;
                 case checkRange(outcome[spin], 38, 46): // 13.8% probability
-                    symbol = new objects.Symbol(util.BANANA_PATH, 0, 150, true);
+                    symbol = new objects.Symbol(util.BANANA_PATH, 0, 230, 200, 200, true);
                     bananas++;
                     break;
                 case checkRange(outcome[spin], 47, 54): // 12.3% probability
-                    symbol = new objects.Symbol(util.ORANGE_PATH, 0, 150, true);
+                    symbol = new objects.Symbol(util.ORANGE_PATH, 0, 230, 200, 200, true);
                     oranges++;
                     break;
                 case checkRange(outcome[spin], 55, 59): //  7.7% probability
-                    symbol = new objects.Symbol(util.CHERRY_PATH, 0, 150, true);
+                    symbol = new objects.Symbol(util.CHERRY_PATH, 0, 230, 200, 200, true);
                     cherries++;
                     break;
                 case checkRange(outcome[spin], 60, 62): //  4.6% probability
-                    symbol = new objects.Symbol(util.BAR_PATH, 0, 150, true);
+                    symbol = new objects.Symbol(util.BAR_PATH, 0, 230, 200, 200, true);
                     bars++;
                     break;
                 case checkRange(outcome[spin], 63, 64): //  3.1% probability
-                    symbol = new objects.Symbol(util.BELL_PATH, 0, 150, true);
+                    symbol = new objects.Symbol(util.BELL_PATH, 0, 230, 200, 200, true);
                     bells++;
                     break;
                 case checkRange(outcome[spin], 65, 65): //  1.5% probability
-                    symbol = new objects.Symbol(util.SEVEN_PATH, 0, 150, true);
+                    symbol = new objects.Symbol(util.SEVEN_PATH, 0, 230, 200, 200, true);
                     sevens++;
                     break;
                 default:
-                    symbol = new objects.Symbol(util.BLANK_PATH, 0, 150, true);
+                    symbol = new objects.Symbol(util.BLANK_PATH, 0, 230, 200, 200, true);
             }
             betLine.push(symbol);
         }
@@ -318,11 +305,11 @@ var game = (function () {
         //
         spinResult = spinReels();
         firstSymbol = spinResult[0];
-        firstSymbol.x = 0;
+        firstSymbol.x = 260;
         secondSymbol = spinResult[1];
-        secondSymbol.x = 230;
+        secondSymbol.x = 480;
         thirdSymbol = spinResult[2];
-        thirdSymbol.x = 460;
+        thirdSymbol.x = 700;
         stage.addChild(firstSymbol);
         stage.addChild(secondSymbol);
         stage.addChild(thirdSymbol);
