@@ -11,12 +11,12 @@ var game = (function () {
         createjs.Ticker.framerate = 60;
         createjs.Ticker.on('tick', Update);
         stage.enableMouseOver(20);
-        //
-        currentSceneState = scenes.State.NO_SCENE;
+        currentSceneState = scenes.State.NO_SCENE; // default state
         config.GameConfig.SCENE_STATE = scenes.State.START;
         Main();
     }
     function Update() {
+        // only when switching from Scene A to Scene B
         if (currentSceneState != config.GameConfig.SCENE_STATE) {
             Main();
         }
@@ -25,6 +25,7 @@ var game = (function () {
     }
     function Main() {
         console.log("%c Switching Scenes!", "color: green; font-size: 16px;");
+        // when switching from Scene A to Scene B
         if (currentSceneState != scenes.State.NO_SCENE) {
             currentScene.removeAllChildren();
             stage.removeAllChildren();

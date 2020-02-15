@@ -16,7 +16,6 @@ var objects;
 (function (objects) {
     var Symbol = /** @class */ (function (_super) {
         __extends(Symbol, _super);
-        // constructor
         function Symbol(imagePath, x, y, width, height, isCentered) {
             if (x === void 0) { x = 0; }
             if (y === void 0) { y = 0; }

@@ -5,9 +5,14 @@ module util {
 
     // assets
 
+    // https://www.pngwave.com/png-clip-art-cexue
     export const START_BUTTON_PATH: string = '/Assets/images/startButton.png';
 
     export const BLANK_PATH: string = '../Assets/images/blank.jpg';
+
+    // https://www.freepnglogos.com/images/dollar-sign-16975.html
+    export const DOLLAR_PATH: string = '../Assets/images/dollar.jpg';
+
     // http://www.freestockphotos.biz/stockphoto/15909
     export const BANANA_PATH: string = '../Assets/images/banana.jpg';
 
