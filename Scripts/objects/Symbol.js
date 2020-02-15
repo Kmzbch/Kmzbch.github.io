@@ -1,17 +1,4 @@
 "use strict";
-// module objects {
-//     export class Symbol extends createjs.Bitmap {
-//         constructor(imagePath: string, x: number, y: number, isCentered: boolean) {
-//             super(imagePath);
-//             if (isCentered) {
-//                 this.regX = -150;
-//                 this.regY = 25;
-//             }
-//             this.x = x;
-//             this.y = y;
-//         }
-//     }
-// }
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -39,16 +26,12 @@ var objects;
             var _this = _super.call(this, imagePath, x, y, isCentered) || this;
             _super.prototype.CustomSize.call(_this, width, height, isCentered);
             return _this;
-            // this.Start();
         }
         Symbol.prototype.Start = function () {
-            throw new Error("Method not implemented.");
         };
         Symbol.prototype.Update = function () {
-            throw new Error("Method not implemented.");
         };
         Symbol.prototype.Reset = function () {
-            throw new Error("Method not implemented.");
         };
         return Symbol;
     }(objects.GameObject));
