@@ -66,7 +66,6 @@ module objects {
             this.y = newPosition.y;
         }
 
-
         // CONSTRUCTOR
         constructor(imagePath: string = './Assets/images/placeholder.png',
             x: number = 0, y: number = 0, centered: boolean = false) {

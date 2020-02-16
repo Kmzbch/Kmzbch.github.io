@@ -24,30 +24,28 @@ var objects;
             if (height === void 0) { height = 0; }
             if (isCentered === void 0) { isCentered = false; }
             var _this = _super.call(this, imagePath, x, y, isCentered) || this;
+            // MEMBER VARIABLES
             _this._isDisabled = false;
             _super.prototype.CustomSize.call(_this, width, height, isCentered);
-            // this.Start();
             // common events
             _this.on('mouseover', _this.HoverOver);
             _this.on('mouseout', _this.HoverOut);
             return _this;
         }
+        // PUBLIC METHODS
         Button.prototype.Start = function () {
-            throw new Error("Method not implemented.");
         };
         Button.prototype.Update = function () {
-            throw new Error("Method not implemented.");
         };
         Button.prototype.Reset = function () {
-            throw new Error("Method not implemented.");
         };
         Object.defineProperty(Button.prototype, "isDisabled", {
+            // PROPERTIES
             get: function () {
                 return this._isDisabled;
             },
             set: function (newState) {
                 this._isDisabled = newState;
-                console.log(newState);
                 if (newState) {
                     this.removeAllEventListeners();
                     this.alpha = 0.3;

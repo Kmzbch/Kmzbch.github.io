@@ -16,6 +16,7 @@ var objects;
 (function (objects) {
     var Symbol = /** @class */ (function (_super) {
         __extends(Symbol, _super);
+        // CONSTRUCTOR
         function Symbol(imagePath, x, y, width, height, isCentered) {
             if (x === void 0) { x = 0; }
             if (y === void 0) { y = 0; }
@@ -26,6 +27,7 @@ var objects;
             _super.prototype.CustomSize.call(_this, width, height, isCentered);
             return _this;
         }
+        // PUBLIC METHODS
         Symbol.prototype.Start = function () {
         };
         Symbol.prototype.Update = function () {

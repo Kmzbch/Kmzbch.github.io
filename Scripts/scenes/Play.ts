@@ -13,6 +13,8 @@ module scenes {
         private _firstSymbol: objects.Symbol;
         private _secondSymbol: objects.Symbol;
         private _thirdSymbol: objects.Symbol;
+        private _fourthSymbol: objects.Symbol;
+        private _fifthSymbol: objects.Symbol;
         private _spinResult: objects.Symbol[] = [];
         // buttons
         private _betOneButton: objects.Button;
@@ -50,9 +52,11 @@ module scenes {
             this._betLabel = new objects.Label(this._padDigits(this._playerBet, 8), "33px", "Consolas", "orangered", 710, 400, true);
 
             // create symbols
-            this._firstSymbol = new objects.Symbol(util.DOLLAR_PATH, 260, 230, 200, 200, true);
-            this._secondSymbol = new objects.Symbol(util.DOLLAR_PATH, 480, 230, 200, 200, true);
-            this._thirdSymbol = new objects.Symbol(util.DOLLAR_PATH, 700, 230, 200, 200, true);
+            this._firstSymbol = new objects.Symbol(util.DOLLAR_PATH, 130, 230, 150, 150, true);
+            this._secondSymbol = new objects.Symbol(util.DOLLAR_PATH, 305, 230, 150, 150, true);
+            this._thirdSymbol = new objects.Symbol(util.DOLLAR_PATH, 480, 230, 150, 150, true);
+            this._fourthSymbol = new objects.Symbol(util.DOLLAR_PATH, 655, 230, 150, 150, true);
+            this._fifthSymbol = new objects.Symbol(util.DOLLAR_PATH, 830, 230, 150, 150, true);
 
             // create buttons
             this._betOneButton = new objects.Button(util.BETONE_BUTTON_PATH, 200, 490, 100, 100, true);
@@ -89,6 +93,8 @@ module scenes {
             this.addChild(this._firstSymbol);
             this.addChild(this._secondSymbol);
             this.addChild(this._thirdSymbol);
+            this.addChild(this._fourthSymbol);
+            this.addChild(this._fifthSymbol);
             // add objects
             this.addChild(this._betOneButton);
             this.addChild(this._betTenButton);
@@ -121,10 +127,12 @@ module scenes {
                 this.bet(100);
             });
 
-            this._resetButton.on('click', () => { this.resetAll() });
+            this._resetButton.on('click', () => {
+                this.resetAll();
+            });
 
             this._quitButton.on('click', () => {
-                config.GameConfig.SCENE_STATE = scenes.State.START;
+                config.GameConfig.SCENE_STATE = scenes.State.END;
             });
 
             //
@@ -163,54 +171,60 @@ module scenes {
             this.removeChild(this._firstSymbol);
             this.removeChild(this._secondSymbol);
             this.removeChild(this._thirdSymbol);
+            this.removeChild(this._fourthSymbol);
+            this.removeChild(this._fifthSymbol);
 
             let betLine: objects.Symbol[] = [];
             let outcome: number[] = [0, 0, 0];
             let symbol: objects.Symbol;
 
-            let symbolPositionXs: number[] = [260, 480, 700];
+            let symbolPositionXs: number[] = [130, 305, 480, 655, 830];
 
-            for (let spin: number = 0; spin < 3; spin++) {
+            // for (let spin: number = 0; spin < 3; spin++) {
+            for (let spin: number = 0; spin < 5; spin++) {
 
                 outcome[spin] = Math.floor((Math.random() * 65) + 1);
+
                 if (this._cheatingForJackpot) {
+                    // seven is assigned with cheat code
                     outcome[spin] = 65;
                 }
+                // determine symbols
                 switch (outcome[spin]) {
                     case this._checkRange(outcome[spin], 1, 27): // 41.5% probability
-                        symbol = new objects.Symbol(util.BLANK_PATH, symbolPositionXs[spin], 230, 200, 200, true);
+                        symbol = new objects.Symbol(util.BLANK_PATH, symbolPositionXs[spin], 230, 150, 150, true);
                         this._blanks++;
                         break;
                     case this._checkRange(outcome[spin], 28, 37): // 15.4% probability
-                        symbol = new objects.Symbol(util.GRAPE_PATH, symbolPositionXs[spin], 230, 200, 200, true);
+                        symbol = new objects.Symbol(util.GRAPE_PATH, symbolPositionXs[spin], 230, 150, 150, true);
                         this._grapes++;
                         break;
                     case this._checkRange(outcome[spin], 38, 46): // 13.8% probability
-                        symbol = new objects.Symbol(util.BANANA_PATH, symbolPositionXs[spin], 230, 200, 200, true);
+                        symbol = new objects.Symbol(util.BANANA_PATH, symbolPositionXs[spin], 230, 150, 150, true);
                         this._bananas++;
                         break;
                     case this._checkRange(outcome[spin], 47, 54): // 12.3% probability
-                        symbol = new objects.Symbol(util.ORANGE_PATH, symbolPositionXs[spin], 230, 200, 200, true);
+                        symbol = new objects.Symbol(util.ORANGE_PATH, symbolPositionXs[spin], 230, 150, 150, true);
                         this._oranges++;
                         break;
                     case this._checkRange(outcome[spin], 55, 59): //  7.7% probability
-                        symbol = new objects.Symbol(util.CHERRY_PATH, symbolPositionXs[spin], 230, 200, 200, true);
+                        symbol = new objects.Symbol(util.CHERRY_PATH, symbolPositionXs[spin], 230, 150, 150, true);
                         this._cherries++;
                         break;
                     case this._checkRange(outcome[spin], 60, 62): //  4.6% probability
-                        symbol = new objects.Symbol(util.BAR_PATH, symbolPositionXs[spin], 230, 200, 200, true);
+                        symbol = new objects.Symbol(util.BAR_PATH, symbolPositionXs[spin], 230, 150, 150, true);
                         this._bars++;
                         break;
                     case this._checkRange(outcome[spin], 63, 64): //  3.1% probability
-                        symbol = new objects.Symbol(util.BELL_PATH, symbolPositionXs[spin], 230, 200, 200, true);
+                        symbol = new objects.Symbol(util.BELL_PATH, symbolPositionXs[spin], 230, 150, 150, true);
                         this._bells++;
                         break;
                     case this._checkRange(outcome[spin], 65, 65): //  1.5% probability
-                        symbol = new objects.Symbol(util.SEVEN_PATH, symbolPositionXs[spin], 230, 200, 200, true);
+                        symbol = new objects.Symbol(util.SEVEN_PATH, symbolPositionXs[spin], 230, 150, 150, true);
                         this._sevens++;
                         break;
                     default:
-                        symbol = new objects.Symbol(util.BLANK_PATH, symbolPositionXs[spin], 230, 200, 200, true);
+                        symbol = new objects.Symbol(util.BLANK_PATH, symbolPositionXs[spin], 230, 150, 150, true);
                 }
                 betLine.push(symbol);
             }
@@ -223,7 +237,35 @@ module scenes {
                 this._showWinMessage();
             } else {
                 if (this._blanks == 0) {
-                    if (this._grapes == 3) {
+                    if (this._grapes == 5) {
+                        this._winnings = this._playerBet * 30;
+                    } else if (this._bananas == 5) {
+                        this._winnings = this._playerBet * 40;
+                    } else if (this._oranges == 5) {
+                        this._winnings = this._playerBet * 70;
+                    } else if (this._cherries == 5) {
+                        this._winnings = this._playerBet * 80;
+                    } else if (this._bars == 5) {
+                        this._winnings = this._playerBet * 100;
+                    } else if (this._bells == 5) {
+                        this._winnings = this._playerBet * 150;
+                    } else if (this._sevens == 5) {
+                        this._winnings = this._playerBet * 200;
+                    } else if (this._grapes == 4) {
+                        this._winnings = this._playerBet * 20;
+                    } else if (this._bananas == 4) {
+                        this._winnings = this._playerBet * 30;
+                    } else if (this._oranges == 4) {
+                        this._winnings = this._playerBet * 40;
+                    } else if (this._cherries == 4) {
+                        this._winnings = this._playerBet * 60;
+                    } else if (this._bars == 4) {
+                        this._winnings = this._playerBet * 75;
+                    } else if (this._bells == 4) {
+                        this._winnings = this._playerBet * 105;
+                    } else if (this._sevens == 4) {
+                        this._winnings = this._playerBet * 150;
+                    } else if (this._grapes == 3) {
                         this._winnings = this._playerBet * 10;
                     } else if (this._bananas == 3) {
                         this._winnings = this._playerBet * 20;
@@ -296,10 +338,14 @@ module scenes {
             this._firstSymbol = this._spinResult[0];
             this._secondSymbol = this._spinResult[1];
             this._thirdSymbol = this._spinResult[2];
+            this._fourthSymbol = this._spinResult[3];
+            this._fifthSymbol = this._spinResult[4];
 
             this.stage.addChild(this._firstSymbol);
             this.stage.addChild(this._secondSymbol);
             this.stage.addChild(this._thirdSymbol);
+            this.stage.addChild(this._fourthSymbol);
+            this.stage.addChild(this._fifthSymbol);
 
             this._determineWinnings();
 
@@ -319,8 +365,6 @@ module scenes {
 
         }
 
-
-        /* Utilities */
         /* Utility function to show a win message and increase player money */
         private _showWinMessage(): void {
             this._playerMoney += this._winnings;
@@ -345,6 +389,7 @@ module scenes {
         }
 
         private resetAll(): void {
+            // reset member variables
             this._playerMoney = util.PLAYER_MONEY;
             this._jackpot = util.JACKPOT;
             this._playerBet = 0;

@@ -1,3 +1,13 @@
+// Auther: Kei Mizubuchi
+// Student Number: 300936630
+// Creation Date: Feb 16, 2020
+// Game App description:
+//  Slot Machine game built on Creatjs.
+//  Player can play slot-machine-like game on the browser
+// Revision History:
+// Feb 16, 2020 Version 0.1
+// Feb 16, 2020 Version 1.0
+
 let game = (() => {
     let canvas: HTMLCanvasElement = document.getElementsByTagName('canvas')[0];
     let stage: createjs.Stage;
@@ -6,6 +16,7 @@ let game = (() => {
     let currentScene: objects.Scene;
     let startScene: objects.Scene;
     let playScene: objects.Scene;
+    let endScene: objects.Scene;
 
     function Start(): void {
         stage = new createjs.Stage(canvas);
@@ -37,6 +48,7 @@ let game = (() => {
             stage.removeAllChildren();
         }
 
+        // switch to the new scene
         switch (config.GameConfig.SCENE_STATE) {
             case scenes.State.START:
                 startScene = new scenes.Start();
@@ -45,6 +57,10 @@ let game = (() => {
             case scenes.State.PLAY:
                 playScene = new scenes.Play();
                 currentScene = playScene;
+                break;
+            case scenes.State.END:
+                endScene = new scenes.End();
+                currentScene = endScene;
                 break;
 
         }

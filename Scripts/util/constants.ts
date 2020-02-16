@@ -2,11 +2,13 @@ module util {
     export const PLAYER_MONEY: number = 1000;
     export const JACKPOT: number = 1000;
     export const GAME_TITLE: string = '$ SUPER SLOT $';
+    export const GAME_OVER: string = '$ THANK YOU FOR PLAYING! $';
 
     // assets
-
     // https://www.pngwave.com/png-clip-art-cexue
     export const START_BUTTON_PATH: string = '/Assets/images/startButton.png';
+
+    export const START_AGAIN_BUTTON_PATH: string = '/Assets/images/startAgainButton.png';
 
     export const BLANK_PATH: string = '../Assets/images/blank.jpg';
 

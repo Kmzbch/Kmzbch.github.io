@@ -16,17 +16,7 @@ var objects;
 (function (objects) {
     var Label = /** @class */ (function (_super) {
         __extends(Label, _super);
-        /**
-         * Creates an instance of Label.
-         * @param {string} labelString
-         * @param {string} fontSize
-         * @param {string} fontFamily
-         * @param {string} fontColour
-         * @param {number} x
-         * @param {number} y
-         * @param {boolean} isCentered
-         * @memberof Label
-         */
+        // CONSTRUCTORS
         function Label(labelString, fontSize, fontFamily, fontColour, x, y, isCentered) {
             var _this = _super.call(this, labelString, fontSize + " " + fontFamily, fontColour) || this;
             if (isCentered) {

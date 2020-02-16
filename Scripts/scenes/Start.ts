@@ -30,8 +30,3 @@ module scenes {
         }
     }
 }
-
-
-
-
-
